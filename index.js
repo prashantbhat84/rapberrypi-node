@@ -9,7 +9,7 @@ const url = "https://tranquil-cove-09766.herokuapp.com";
 const timestamp = [];
 const port1 = 3000;
 const network = os.networkInterfaces();
-console.log(network)
+
 const id = (network['eth0'][0].mac);
 let aggid = id.split(":");
 let temp = "";
