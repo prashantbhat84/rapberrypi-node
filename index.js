@@ -6,7 +6,7 @@ const serial = require("serialport");
 const ByteLength = require('@serialport/parser-byte-length');
 const os = require('os');
 const url = "https://tranquil-cove-09766.herokuapp.com";
-const timestamp = [];
+let timestamp = [];
 const port1 = 3000;
 const network = os.networkInterfaces();
 
@@ -67,22 +67,25 @@ sp1 = sp.pipe(new ByteLength(options))
 
 
 sp1.on('data', (data) => {
-  console.time("Data");
+
   let val = JSON.stringify(data);
   val = (JSON.parse(val));
   const time = createTimestampAndAggregator();
-  let finaldata = [...val1.data, ...time]
+  let finaldata = [...val.data, ...time];
   const internet = checkInternetConnection();
   if (internet) {
     const server = `${url}/api/v1/aggregator/updateAggregatorAndBox`
     axios.post(server, {
-      body: JSON.stringify(finaldata),
+      body: {
+        data: JSON.stringify(finaldata)
+      },
 
     }).then(res => {
       console.log(res.data)
     })
   }
-  console.timeEnd("Data")
+  timestamp = [];
+
   // const send = val1.data[5].toString();
   // const finaldata = send + "\r" + "\n";
   // sp.write(send);
